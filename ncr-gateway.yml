@@ -1,0 +1,191 @@
+cloud:
+  config:
+    failFast: true
+    discovery: true
+    enabled: true
+#ribbon:
+#  ConnectTimeout: 60000
+#  ReadTimeout: 60000
+#  maxAutoRetries: 2
+#  MaxAutoRetriesNextServer: 2
+#  eureka:
+#    enabled: true
+zuul:
+  ignoredServices: '*'
+  host:
+    connect-timeout-millis: 60000
+    socket-timeout-millis: 60000
+  add-proxy-headers: true
+  routes:
+#ncr auth
+    ncr-auth:
+      sensitiveHeaders: Cookie,Set-Cookie
+      path: /uaa/**
+      url: https://dev.yourvcam.com:5000
+      stripPrefix: false
+#ncr-tasks
+    ncr-tasks:
+      sensitiveHeaders: Cookie,Set-Cookie
+      path: /tasks/**
+      url: https://dev.yourvcam.com:5080
+      stripPrefix: false
+#ncr-device
+    ncr-device:
+      sensitiveHeaders: Cookie,Set-Cookie
+      path: /device/**
+      url: https://dev.yourvcam.com:5050
+      stripPrefix: false
+#ncr-stats
+    ncr-stats:
+      sensitiveHeaders: Cookie,Set-Cookie
+      path: /stats/**
+      url: https://dev.yourvcam.com:5040
+      stripPrefix: false
+#ncr-sales
+    ncr-sales:
+      sensitiveHeaders: Cookie,Set-Cookie
+      path: /sales/**
+      url: https://dev.yourvcam.com:5090
+      stripPrefix: false
+#ncr-wso
+    ncr-wso:
+      sensitiveHeaders: Cookie,Set-Cookie
+      path: /wso/**
+      url: https://dev.yourvcam.com:7194
+      stripPrefix: false
+##ncr-mobile
+#    ncr-mobile:
+#      sensitiveHeaders: Cookie,Set-Cookie
+#      path: /mobile/**
+#      stripPrefix: false
+security:
+  basic:
+    enabled: false
+  sessions: never
+  user:
+    name: usrgateway
+    password: usrg4t3w4y
+  oauth2:
+    resource:
+      userInfoUri: https://dev.yourvcam.com:4000/uaa/user/login
+    client:
+      accessTokenUri: https://dev.yourvcam.com:4000/uaa/oauth/token
+      userAuthorizationUri: https://dev.yourvcam.com:4000/uaa/oauth/authorize
+      clientId: usrauth
+      clientSecret: usr4uth
+      authorized-grant-types: implicit,authorization_code,refresh_token,password
+      scope: openid
+server:
+  port: 4000
+  ssl:
+    enabled: true
+    key-alias: dev.yourvcam.com
+    key-password: changeit
+    key-store: /etc/apache2/ssl/dev.yourvcam.com/keystore/keystore.p12
+    key-store-provider: SUN
+    key-store-type: JKS
+    key-store-password: changeit
+recording:
+  path: /var/www/html/
+---
+spring:
+  profiles: dev
+server:
+  port: 4001
+security:
+  basic:
+    enabled: false
+  sessions: never
+  user:
+    name: usrgateway
+    password: usrg4t3w4y
+  oauth2:
+    resource:
+      userInfoUri: https://dev.yourvcam.com:4001/uaa/user/login
+    client:
+      accessTokenUri: https://dev.yourvcam.com:4001/uaa/oauth/token
+      userAuthorizationUri: https://dev.yourvcam.com:4001/uaa/oauth/authorize
+      clientId: usrauth
+      clientSecret: usr4uth
+      authorized-grant-types: implicit,authorization_code,refresh_token,password
+      scope: openid
+---
+spring:
+  profiles: client
+ems:
+  server: demo.yourvcam.com
+zuul:
+  ignoredServices: '*'
+  host:
+    connect-timeout-millis: 60000
+    socket-timeout-millis: 60000
+  add-proxy-headers: true
+  routes:
+#ncr auth
+    ncr-auth:
+      sensitiveHeaders: Cookie,Set-Cookie
+      path: /uaa/**
+      url: https://demo.yourvcam.com:5000
+      stripPrefix: false
+#ncr-tasks
+    ncr-tasks:
+      sensitiveHeaders: Cookie,Set-Cookie
+      path: /tasks/**
+      url: https://demo.yourvcam.com:5080
+      stripPrefix: false
+#ncr-device
+    ncr-device:
+      sensitiveHeaders: Cookie,Set-Cookie
+      path: /device/**
+      url: https://demo.yourvcam.com:5050
+      stripPrefix: false
+#ncr-stats
+    ncr-stats:
+      sensitiveHeaders: Cookie,Set-Cookie
+      path: /stats/**
+      url: https://demo.yourvcam.com:5040
+      stripPrefix: false
+#ncr-sales
+    ncr-sales:
+      sensitiveHeaders: Cookie,Set-Cookie
+      path: /sales/**
+      url: https://demo.yourvcam.com:5090
+      stripPrefix: false
+#ncr-wso
+    ncr-wso:
+      sensitiveHeaders: Cookie,Set-Cookie
+      path: /wso/**
+      url: https://demo.yourvcam.com:7194
+      stripPrefix: false
+#ncr-mobile
+#    ncr-mobile:
+#      sensitiveHeaders: Cookie,Set-Cookie
+#      path: /mobile/**
+#      stripPrefix: false
+security:
+  basic:
+    enabled: false
+  sessions: never
+  user:
+    name: usrgateway
+    password: usrg4t3w4y
+  oauth2:
+    resource:
+      userInfoUri: https://demo.yourvcam.com:4000/uaa/user/login
+    client:
+      accessTokenUri: https://demo.yourvcam.com:4000/uaa/oauth/token
+      userAuthorizationUri: https://demo.yourvcam.com:4000/uaa/oauth/authorize
+      clientId: usrauth
+      clientSecret: usr4uth
+      authorized-grant-types: implicit,authorization_code,refresh_token,password
+      scope: openid
+server:
+  port: 4000
+  ssl:
+    enabled: true
+    key-alias: demo.yourvcam.com
+    key-password: changeit
+    key-store: /etc/apache2/ssl/demo.yourvcam.com/keystore/keystore.p12
+    key-store-provider: SUN
+    key-store-type: JKS
+    key-store-password: changeit
