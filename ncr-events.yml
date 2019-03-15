@@ -1,0 +1,60 @@
+server:
+  port: 5070
+  use-forward-headers: true
+  undertow:
+    ioThreads: 15
+    workerThreads: 150
+    accesslog:
+      enabled: true
+  compression:
+    enabled: true
+    mimeTypes: text/html, text/xml, text/plain, text/css, text/javascript, application/javascript
+    minResponseSize: 4096
+  ssl:
+    enabled: true
+    key-alias: dev.yourvcam.com
+    key-password: changeit
+    key-store: /etc/apache2/ssl/dev.yourvcam.com/keystore/keystore.p12
+    key-store-provider: SUN
+    key-store-type: JKS
+    key-store-password: changeit
+security:
+  basic:
+    enabled: false
+  sessions: never
+
+---
+spring:
+  profiles: client
+server:
+  ssl:
+    enabled: true
+    key-alias: demo.yourvcam.com
+    key-password: changeit
+    key-store: /etc/apache2/ssl/demo.yourvcam.com/keystore/keystore.p12
+    key-store-provider: SUN
+    key-store-type: JKS
+    key-store-password: changeit
+#spring:
+#  profiles: dev
+#server:
+#  port: 5060
+#security:
+#  basic:
+#    enabled: false
+#  sessions  : never
+#  user:
+#    name: usrmobile
+#    password: u5rm0b1le
+#  oauth2:
+#    resource:
+#      userInfoUri: http://localhost:4001/uaa/user/login
+#    client:
+#      accessTokenUri: http://localhost:4001/uaa/oauth/token
+#      userAuthorizationUri  : http://localhost:4001/uaa/oauth/authorize
+#      clientId: usrmobile
+#      clientSecret: u5rm0b1lee
+#      authorized-grant-types: client_credentials
+#      grant-type: client_credentials
+#      scope: core
+---
