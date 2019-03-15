@@ -1,0 +1,163 @@
+server:
+  context-path: /uaa
+  port: 5000
+  use-forward-headers: true
+  undertow:
+    ioThreads: 15
+    workerThreads: 150
+    accesslog:
+      enabled: true
+  compression:
+    enabled: true
+    mimeTypes: text/html, text/xml, text/plain, text/css, text/javascript, application/javascript
+    minResponseSize: 4096
+  ssl:
+    enabled: true
+    key-alias: dev.yourvcam.com
+    key-password: changeit
+    key-store: /etc/apache2/ssl/dev.yourvcam.com/keystore/keystore.p12
+    key-store-provider: SUN
+    key-store-type: JKS
+    key-store-password: changeit
+mail:
+  server: dev.yourvcam.com
+recording:
+  path: /var/www/html/
+security:
+  basic:
+    enabled: false
+  sessions: never
+  user:
+    name: usrauth
+    password: usr4uth
+  oauth2:
+    client:
+      clientId: usrauth
+      clientSecret: usr4uth
+      authorized-grant-types: refresh_token,password
+      scope: openid
+    resource:
+      filter-order: 3
+uiclient:
+  oauth:
+    clientid: usrauth
+    secret: usr4uth
+    tokenValidityInSeconds: 7200
+spring:
+  datasource:
+    url:  jdbc:mysql://127.0.0.1:3306/authserver?autoReconnect=true&useSSL=false
+    username: ncrauth
+    password: 14753690
+    driver-class-name:  com.mysql.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+#Hibernate Configuration:
+hibernate:
+  transaction:
+    manager_lookup_class: org.springframework.orm.hibernate5.HibernateTransactionManager
+  archive:
+    autodetection:  class
+    current_sesion_context_class: jta
+  connection:
+    charSet:  UTF-8
+    implicit_naming_strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+    dialect:  org.hibernate.dialect.MySQL5Dialect
+  c3p0:
+    min_size: 5
+    max_size: 20
+    timeout:  1800
+    max_statements: 50
+  show_sql: true
+  format_sql: true
+  hbm2ddl.auto: create-drop
+domain:
+  package:
+    model: com.ncr.server.domain
+---
+spring:
+  profiles: dev
+  datasource:
+    url:  jdbc:mysql://127.0.0.1:3306/authservertest?autoReconnect=true&useSSL=false
+    password: 14753690
+  jpa:
+    properties:
+        hibernate:
+          enable_lazy_load_no_trans: true
+    hibernate:
+      ddl-auto: create-drop
+hibernate:
+  hbm2ddl:
+    auto: create-drop
+server:
+  port: 5001
+---
+spring:
+  profiles: prod
+  jpa:
+    hibernate:
+      ddl-auto: validate
+hibernate:
+  hbm2ddl:
+    auto: validate
+mail:
+  server: app.yourvcam.com
+---
+spring:
+  profiles: test
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+hibernate:
+  hbm2ddl:
+    auto: create-drop
+server:
+  port: 5002
+---
+spring:
+  profiles: client
+server:
+  ssl:
+    enabled: true
+    key-alias: demo.yourvcam.com
+    key-password: changeit
+    key-store: /etc/apache2/ssl/demo.yourvcam.com/keystore/keystore.p12
+    key-store-provider: SUN
+    key-store-type: JKS
+    key-store-password: changeit
+mail:
+  server: demo.yourvcam.com
+  datasource:
+    url:  jdbc:mysql://127.0.0.1:3306/authserver?autoReconnect=true&useSSL=false
+    username: ncrauth
+    password: 14753690
+    driver-class-name:  com.mysql.jdbc.Driver
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+#Hibernate  Configuration
+hibernate:
+  transaction:
+    manager_lookup_class: org.springframework.orm.hibernate5.HibernateTransactionManager
+  archive:
+    autodetection:  class
+    current_sesion_context_class: jta
+  connection:
+    charSet:  UTF-8
+    implicit_naming_strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+    dialect:  org.hibernate.dialect.MySQL5Dialect
+  c3p0:
+    min_size: 5
+    max_size: 20
+    timeout:  1800
+    max_statements: 50
+  show_sql: true
+  format_sql: true
+  hbm2ddl.auto: validate
