@@ -1,0 +1,128 @@
+server:
+  context-path: /device
+  port: 5050
+  use-forward-headers: true
+  undertow:
+    ioThreads: 15
+    workerThreads: 150
+    accesslog:
+      enabled: true
+    session:
+      timeout: 1440m
+  compression:
+    enabled: true
+    mimeTypes: text/html, text/xml, text/plain, text/css, text/javascript, application/javascript
+    minResponseSize: 4096
+  ssl:
+    enabled: true
+    key-alias: dev.yourvcam.com
+    key-password: changeit
+    key-store: /etc/apache2/ssl/dev.yourvcam.com/keystore/keystore.p12
+    key-store-provider: SUN
+    key-store-type: JKS
+    key-store-password: changeit
+ems:
+  server: dev.yourvcam.com
+ers:
+  server:
+    ip: ersdev.yourvcam.com
+    port: 3535
+    adminPort: 3030
+security:
+  basic:
+    enabled: false
+  sessions: never
+  user:
+    name  : usrdevice
+    password  : usrd3v1c3
+  oauth2:
+    resource:
+      userInfoUri: https://dev.yourvcam.com:4000/uaa/user/login
+    client:
+      accessTokenUri: https://dev.yourvcam.com:4000/uaa/oauth/token
+      userAuthorizationUri: https://dev.yourvcam.com:4000/uaa/oauth/authorize
+      clientId: usrdevice
+      clientSecret: usrd3v1c3
+      authorized-grant-types: client_credentials
+      grant-type: client_credentials
+      scope: core
+domain:
+  package:
+    model: com.ncr.server.domain
+spring:
+  data:
+    mongodb:
+      database: deviceserver
+      uri: mongodb://ncrdevice:14753690device@localhost:27017/deviceserver
+evostreamMediaDir: /var/evostreamms/media/
+recording:
+  path: /var/www/html/
+---
+spring:
+  profiles: dev
+  data:
+    mongodb:
+      database: deviceservertest
+      uri: mongodb://localhost:27017/deviceservertest
+server:
+  port: 5051
+security:
+  basic:
+    enabled: false
+  sessions  : never
+  user:
+    name: usrdevice
+    password: usrd3v1c3
+  oauth2:
+    resource:
+      userInfoUri: https://dev.yourvcam.com:4001/uaa/user/login
+    client:
+      accessTokenUri: https://dev.yourvcam.com:4001/uaa/oauth/token
+      userAuthorizationUri  : https://dev.yourvcam.com:4001/uaa/oauth/authorize
+      clientId: usrdevice
+      clientSecret: usrd3v1c3
+      authorized-grant-types: client_credentials
+      grant-type: client_credentials
+      scope: core
+---
+spring:
+  profiles: client
+ems:
+  server: demo.yourvcam.com
+ers:
+  server:
+    ip: ersdemo.yourvcam.com
+    port: 3535
+    adminPort: 3030
+server:
+  ssl:
+    enabled: true
+    key-alias: demo.yourvcam.com
+    key-password: changeit
+    key-store: /etc/apache2/ssl/demo.yourvcam.com/keystore/keystore.p12
+    key-store-provider: SUN
+    key-store-type: JKS
+    key-store-password: changeit
+security:
+  oauth2:
+    resource:
+      userInfoUri: https://demo.yourvcam.com:4000/uaa/user/login
+    client:
+      accessTokenUri: https://demo.yourvcam.com:4000/uaa/oauth/token
+      userAuthorizationUri: https://demo.yourvcam.com:4000/uaa/oauth/authorize
+      clientId: usrdevice
+      clientSecret: usrd3v1c3
+      authorized-grant-types: client_credentials
+      grant-type: client_credentials
+      scope: core
+---
+spring:
+  profiles: dev
+ems:
+  server: dev.yourvcam.com
+ers:
+  server:
+    ip: ersdev.yourvcam.com
+    port: 3535
+    adminPort: 3030
+#comment
